@@ -66,8 +66,8 @@ export const data = [
         },
         {
             text : "Conf call bingo",
-            selected : false,
-            cellColor : "bg-white"
+            selected : true,
+            cellColor : "bg-info bg-opacity-25"
         },
         {
             text : "Can everyone go on mute",
