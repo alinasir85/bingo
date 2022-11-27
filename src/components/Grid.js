@@ -1,6 +1,5 @@
 import Card from "./Card";
 import {useEffect, useState} from "react";
-import Confetti from 'react-confetti';
 
 const Grid=(props)=>{
     const [gridData, setGridData] = useState(props.data);
@@ -9,7 +8,6 @@ const Grid=(props)=>{
     const [LRDiagSelected, setLRDiagSelected] = useState(false);
     const [RLDiagSelected, setRLDiagSelected] = useState(false);
     const [isCheck,setIsCheck] = useState(true);
-    const [showConfetti,setShowConfetti] = useState(false);
     let counter = 1;
 
     const checkRows =()=>{
@@ -153,11 +151,9 @@ const Grid=(props)=>{
                 utter.rate = 1.5;
                 utter.text = 'Congrats, you have made Bingo!!';
                 window.speechSynthesis.speak(utter);
-                setShowConfetti(true);
-                setTimeout(() => {
-                    setShowConfetti(false);
+                setTimeout(()=>{
                     callSelectRandom();
-                }, 3000);
+                },1000)
             } else {
                 callSelectRandom();
             }
@@ -176,17 +172,6 @@ const Grid=(props)=>{
     
     return(
         <>
-            {
-                showConfetti && (
-                    <Confetti
-                        width={window.innerWidth}
-                        height={window.innerHeight}
-                        numberOfPieces={700}
-                        tweenDuration={1000}
-                        gravity={1}
-                    />
-                )
-            }
             <div className="container text-center mt-5">
                 <div className="row row-cols-5 row-cols-sm-5 row-cols-md-5 g-0">
                     {
