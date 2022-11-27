@@ -166,7 +166,18 @@ const Grid=(props)=>{
         }
     }
 
+    function shuffleMatrix(matrix){
+        for(let i = matrix.length-1; i > 0; i--){
+            const j = Math.floor(Math.random() * i)
+            const temp = matrix[i]
+            matrix[i] = matrix[j]
+            matrix[j] = temp
+        }
+        return matrix;
+    }
+
     useEffect(() => {
+        setGridData(shuffleMatrix(gridData));
         checkBingo();
     },[gridData]);
     
