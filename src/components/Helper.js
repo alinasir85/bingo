@@ -1,162 +1,38 @@
-export const data = [
-    [
-        {
-            text : "Child noises in the background",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Hello, hello?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "I need to jump in another call",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Can everyone go on mute",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Could you please get closer to the mic",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
+const texts = [
+    'We cannot hear you', 'Can you hear me?', 'I hear background noise',
+    'I\'m late', 'Need to run to next meeting', 'Is ... here?',
+    'Can you see my screen?', 'Who can share the screen?', 'Let me share my screen',
+    'Seems we lost ...', 'Connection issues', 'Can you repeat please?',
+    'Any blockers?', 'Tomorrow I will have day off', 'Who can help me with this problem?',
+    'Next can go ...', 'Is boarding complete?', 'Let\'s close the call',
+    'We are running late', 'No updates from my side', 'Please mute yourself',
+    'We need to speed-up a bit', 'Still working on ...', 'Let\'s discuss it offline', 'I\'ve sent you a mail'
+];
+
+
+export const getData = (gridSize) => {
+    texts.sort((a, b) => 0.5 - Math.random());
+    const cards = [];
+    let textCount = 0;
+    let totalTexts = Math.floor(texts.length/gridSize);
+    for(let i=0;i<totalTexts;i++) {
+        const cells = [];
+        for(let j=0;j<gridSize;j++) {
+            const cell = {
+                id: textCount,
+                text: texts[textCount++],
+                selected: false,
+                cellColor: 'bg-white bg-opacity-50',
+                clickable: false,
+                render: textCount <= gridSize * gridSize
+            }
+            cells.push(cell);
         }
-    ],
-    [
-        {
-            text : "Can you hear me?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Next slide, please",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Can we take this offline",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Who can help me with this problem?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Could you share these slides afterwards?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        }
-    ],
-    [
-        {
-            text : "Can somebody grant presenter rights?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Can you email that to everyone",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Conf call bingo",
-            selected : true,
-            cellColor : "bg-info bg-opacity-25",
-            clickable: false
-        },
-        {
-            text : "Can everyone go on mute",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Still working on ...",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        }
-    ],
-    [
-        {
-            text : "I need to jump in another call",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Can everyone go on mute",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Could you please get closer to the mic",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Connection issues",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Seems we lost ...",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        }
-    ],
-    [
-        {
-            text : "Can we take this offline",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Any blockers?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Could you share these slides afterwards?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Can somebody grant presenter rights?",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        },
-        {
-            text : "Can you email that to everyone",
-            selected : false,
-            cellColor : "bg-white",
-            clickable: false
-        }
-    ]
-]
+        cards.push(cells);
+    }
+    const middleIndex = Math.floor(gridSize/2);
+    cards[middleIndex][middleIndex].selected = true;
+    cards[middleIndex][middleIndex].cellColor = "bg-info bg-opacity-25";
+    cards[middleIndex][middleIndex].text = "Conf call bingo";
+    return cards;
+}
