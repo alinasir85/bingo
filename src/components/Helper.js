@@ -6,7 +6,9 @@ const texts = [
     'Any blockers?', 'Tomorrow I will have day off', 'Who can help me with this problem?',
     'Next can go ...', 'Is boarding complete?', 'Let\'s close the call',
     'We are running late', 'No updates from my side', 'Please mute yourself',
-    'We need to speed-up a bit', 'Still working on ...', 'Let\'s discuss it offline', 'I\'ve sent you a mail'
+    'We need to speed-up a bit', 'Still working on ...', 'Let\'s discuss it offline', 'I\'ve sent you a mail',
+    'Can everyone go on mute','Next slide, please','Can you email that to everyone','I need to jump in another call',
+    'Load painful echo','Hello World'
 ];
 
 

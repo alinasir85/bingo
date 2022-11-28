@@ -4,12 +4,12 @@ import Confetti from 'react-confetti';
 import {getData} from "./Helper";
 
 const Grid=()=>{
-    const [gridData, setGridData] = useState(getData(5));
+    const [gridSize] = useState(5);
+    const [gridData, setGridData] = useState(getData(gridSize));
     const [rowNum, setRowNum] = useState([]);
     const [colNum, setColNum] = useState([]);
     const [LRDiagSelected, setLRDiagSelected] = useState(false);
     const [RLDiagSelected, setRLDiagSelected] = useState(false);
-    const [isCheck,setIsCheck] = useState(true);
     const [showConfetti,setShowConfetti] = useState(false);
     let counter = 1;
 
@@ -19,17 +19,22 @@ const Grid=()=>{
 
     const checkRows =()=>{
         let rowSelected = true;
-        for(let i=0; i<gridData.length; i++){
-            for(let j=0; j<gridData.length; j++){
+        for(let i=0; i<gridSize; i++){
+            for(let j=0; j<gridSize; j++){
                 rowSelected=true;
                 if(rowNum.includes(i)){
                     rowSelected=false;
                     break;
                 }
-                if(areValidIndexes(i,j) && !gridData[i][j].selected){
-                    rowSelected = false;
-                    break;
+                if(areValidIndexes(i,j)) {
+                    if(!gridData[i][j].selected){
+                        rowSelected = false;
+                        break;
+                    }
+                } else {
+                    rowSelected =false;
                 }
+
             }
             if(rowSelected && !rowNum.includes(i)){
                 setRowNum([...rowNum,i]);
@@ -41,8 +46,8 @@ const Grid=()=>{
 
     const checkCols = () => {
         let colSelected = true;
-        for(let i=0; i<gridData.length; i++){
-            for(let j=0; j<gridData.length; j++){
+        for(let i=0; i<gridSize; i++){
+            for(let j=0; j<gridSize; j++){
                 colSelected=true;
                 if(colNum.includes(i)) {
                     colSelected=false;
@@ -71,7 +76,7 @@ const Grid=()=>{
             return false;
         }
         let diagSelected = true;
-        for(let i=0; i<gridData.length; i++){
+        for(let i=0; i<gridSize; i++){
             diagSelected=true;
             if(areValidIndexes(i,i) && !gridData[i][i].selected){
                 diagSelected = false;
@@ -89,7 +94,7 @@ const Grid=()=>{
         if(RLDiagSelected) {
             return false;
         }
-        for(let i =0,j=gridData.length-1; i<gridData.length; i++,j--){
+        for(let i =0,j=gridSize-1; i<gridSize; i++,j--){
             diagSelected=true;
             if(areValidIndexes(i,j) && !gridData[i][j].selected){
                 diagSelected = false;
@@ -127,19 +132,29 @@ const Grid=()=>{
         return isAnyClickable;
     }
 
+    function sleep(ms) {
+        return(new Promise(function(resolve, reject) {
+            setTimeout(function() { resolve(); }, ms);
+        }));
+    }
+
     const selectRandomCell =  () => {
+        let isBreak = false;
         if(gridData.length > 0) {
-            while (isCheck && !isAnyClickable() && !isAllSelected()) {
-                let i = Math.floor(Math.random() * gridData.length);
-                let j = Math.floor(Math.random() * gridData.length);
+            while (!isBreak && !isAnyClickable() && !isAllSelected()) {
+                let i = Math.floor(Math.random() * (gridData.length-1 + 1));
+                let j = Math.floor(Math.random() * (gridData.length-1 + 1));
                 if (areValidIndexes(i,j) && !gridData[i][j].selected) {
                     const clonedArr = [...gridData];
                     const selectedCell = clonedArr[i][j];
                     const utter = new SpeechSynthesisUtterance();
                     utter.text = selectedCell.text;
-                    utter.rate=3;
+                    //utter.rate=3;
                     if(!isAnyClickable()) {
                         window.speechSynthesis.speak(utter);
+                    }
+                    if(!selectedCell.render) {
+                        (async () => await new Promise(resolve => setTimeout(resolve, 5000)))();
                     }
                     utter.onend = () => {
                         if(!isAnyClickable()) {
@@ -149,10 +164,7 @@ const Grid=()=>{
                             setGridData(clonedArr);
                         }
                     }
-                    if(selectedCell.render) {
-                        setIsCheck(false);
-                        break;
-                    }
+                    isBreak = true;
                 }
             }
         }
@@ -173,7 +185,7 @@ const Grid=()=>{
 
     const callSelectRandom = () => {
         if(!isAllSelected()) {
-            setIsCheck(true);
+            //setIsCheck(true);
             selectRandomCell();
         }
     }
@@ -219,7 +231,7 @@ const Grid=()=>{
                 )
             }
             <div className="container text-center mt-5">
-                <div className="row row-cols-5 row-cols-sm-5 row-cols-md-5 g-0">
+                <div className="row row-cols-5 row-cols-lg-5 row-cols-md-5 row-cols-sm-5 row-cols-xs-5">
                     {
                         gridData.map((items, i)=>(
                             items.map((item, j)=>(
