@@ -138,8 +138,9 @@ const Grid=()=>{
         }));
     }
 
-    const selectRandomCell =  () => {
+    const selectRandomCell = async () => {
         let isBreak = false;
+        const utter = new SpeechSynthesisUtterance();
         if(gridData.length > 0) {
             while (!isBreak && !isAnyClickable() && !isAllSelected()) {
                 let i = Math.floor(Math.random() * (gridData.length-1 + 1));
@@ -147,17 +148,15 @@ const Grid=()=>{
                 if (areValidIndexes(i,j) && !gridData[i][j].selected) {
                     const clonedArr = [...gridData];
                     const selectedCell = clonedArr[i][j];
-                    const utter = new SpeechSynthesisUtterance();
                     utter.text = selectedCell.text;
-                    //utter.rate=3;
                     if(!isAnyClickable()) {
                         window.speechSynthesis.speak(utter);
                     }
-                    if(!selectedCell.render) {
-                        (async () => await new Promise(resolve => setTimeout(resolve, 5000)))();
-                    }
-                    utter.onend = () => {
-                        if(!isAnyClickable()) {
+                    utter.onend = async () => {
+                        if (!selectedCell.render) {
+                            await sleep(3000);
+                        }
+                        if (!isAnyClickable()) {
                             selectedCell.clickable = true;
                             selectedCell.cellColor = 'bg-warning'
                             clonedArr[i][j] = selectedCell;
@@ -185,7 +184,6 @@ const Grid=()=>{
 
     const callSelectRandom = () => {
         if(!isAllSelected()) {
-            //setIsCheck(true);
             selectRandomCell();
         }
     }
